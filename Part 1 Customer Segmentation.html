@@ -13116,8 +13116,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Capstone-Project:-Create-a-Customer-Segmentation-Report-for-Arvato-Financial-Services">Capstone Project: Create a Customer Segmentation Report for Arvato Financial Services<a class="anchor-link" href="#Capstone-Project:-Create-a-Customer-Segmentation-Report-for-Arvato-Financial-Services">&#182;</a></h1><p>In this project, you will analyze demographics data for customers of a mail-order sales company in Germany, comparing it against demographics information for the general population. You'll use unsupervised learning techniques to perform customer segmentation, identifying the parts of the population that best describe the core customer base of the company. Then, you'll apply what you've learned on a third dataset with demographics information for targets of a marketing campaign for the company, and use a model to predict which individuals are most likely to convert into becoming customers for the company. The data that you will use has been provided by our partners at Bertelsmann Arvato Analytics, and represents a real-life data science task.</p>
-<p>If you completed the first term of this program, you will be familiar with the first part of this project, from the unsupervised learning project. The versions of those two datasets used in this project will include many more features and has not been pre-cleaned. You are also free to choose whatever approach you'd like to analyzing the data rather than follow pre-determined steps. In your work on this project, make sure that you carefully document your steps and decisions, since your main deliverable for this project will be a blog post reporting your findings.</p>
+<h1 id="Creating-a-Customer-Segmentation-Report-for-Arvato-Financial-Services">Creating a Customer Segmentation Report for Arvato Financial Services<a class="anchor-link" href="#Creating-a-Customer-Segmentation-Report-for-Arvato-Financial-Services">&#182;</a></h1><p>In this project, I have analyzed demographics data for customers of a mail-order sales company in Germany, comparing it against demographics information for the general population. I have used unsupervised learning techniques to perform customer segmentation, identifying the parts of the population that best describe the core customer base of the company. Then I have used demographics information for targets of a marketing campaign for the company, and used a model to predict which individuals are most likely to convert into becoming customers for the company. The data that I have used has been provided by Bertelsmann Arvato Analytics.</p>
 
 </div>
 </div>
@@ -13127,8 +13126,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[103]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># import libraries here; add more as necessary</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -13140,10 +13138,7 @@ div#notebook {
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>    
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">LabelEncoder</span>
-<span class="c1"># !pip install mca</span>
-<span class="c1"># import mca</span>
 <span class="kn">import</span> <span class="nn">chardet</span>
-<span class="c1"># magic word for producing visualizations in notebook</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
@@ -13163,18 +13158,13 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Part-0:-Get-to-Know-the-Data">Part 0: Get to Know the Data<a class="anchor-link" href="#Part-0:-Get-to-Know-the-Data">&#182;</a></h2><p>There are four data files associated with this project:</p>
+<h2 id="Datasets">Datasets<a class="anchor-link" href="#Datasets">&#182;</a></h2><p>There are four data files associated with this project:</p>
 <ul>
 <li><code>Udacity_AZDIAS_052018.csv</code>: Demographics data for the general population of Germany; 891 211 persons (rows) x 366 features (columns).</li>
 <li><code>Udacity_CUSTOMERS_052018.csv</code>: Demographics data for customers of a mail-order company; 191 652 persons (rows) x 369 features (columns).</li>
 <li><code>Udacity_MAILOUT_052018_TRAIN.csv</code>: Demographics data for individuals who were targets of a marketing campaign; 42 982 persons (rows) x 367 (columns).</li>
 <li><code>Udacity_MAILOUT_052018_TEST.csv</code>: Demographics data for individuals who were targets of a marketing campaign; 42 833 persons (rows) x 366 (columns).</li>
 </ul>
-<p>Each row of the demographics files represents a single person, but also includes information outside of individuals, including information about their household, building, and neighborhood. Use the information from the first two files to figure out how customers ("CUSTOMERS") are similar to or differ from the general population at large ("AZDIAS"), then use your analysis to make predictions on the other two files ("MAILOUT"), predicting which recipients are most likely to become a customer for the mail-order company.</p>
-<p>The "CUSTOMERS" file contains three extra columns ('CUSTOMER_GROUP', 'ONLINE_PURCHASE', and 'PRODUCT_GROUP'), which provide broad information about the customers depicted in the file. The original "MAILOUT" file included one additional column, "RESPONSE", which indicated whether or not each recipient became a customer of the company. For the "TRAIN" subset, this column has been retained, but in the "TEST" subset it has been removed; it is against that withheld column that your final predictions will be assessed in the Kaggle competition.</p>
-<p>Otherwise, all of the remaining columns are the same between the three data files. For more information about the columns depicted in the files, you can refer to two Excel spreadsheets provided in the workspace. <a href="./DIAS Information Levels - Attributes 2017.xlsx">One of them</a> is a top-level list of attributes and descriptions, organized by informational category. <a href="./DIAS Attributes - Values 2017.xlsx">The other</a> is a detailed mapping of data values for each feature in alphabetical order.</p>
-<p>In the below cell, we've provided some initial code to load in the first two datasets. Note for all of the <code>.csv</code> data files in this project that they're semicolon (<code>;</code>) delimited, so an additional argument in the <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html"><code>read_csv()</code></a> call has been included to read in the data properly. Also, considering the size of the datasets, it may take some time for them to load completely.</p>
-<p>You'll notice when the data is loaded in that a warning message will immediately pop up. Before you really start digging into the modeling and analysis, you're going to need to perform some cleaning. Take some time to browse the structure of the data and look over the informational spreadsheets to understand the data values. Make some decisions on which features to keep, which features to drop, and if any revisions need to be made on data formats. It'll be a good idea to create a function with pre-processing steps, since you'll need to clean all of the datasets before you work with them.</p>
 
 </div>
 </div>
@@ -13186,20 +13176,6 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">azdias</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../data/Term2/capstone/arvato_data/Udacity_AZDIAS_052018.csv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
 <span class="n">customers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../data/Term2/capstone/arvato_data/Udacity_CUSTOMERS_052018.csv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Be sure to add in a lot more cells (both markdown and code) to document your</span>
-<span class="c1"># approach and findings!</span>
 </pre></div>
 
     </div>
@@ -14235,7 +14211,7 @@ Converted to numeric
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Part-1:-Customer-Segmentation-Report">Part 1: Customer Segmentation Report<a class="anchor-link" href="#Part-1:-Customer-Segmentation-Report">&#182;</a></h2><p>The main bulk of your analysis will come in this part of the project. Here, you should use unsupervised learning techniques to describe the relationship between the demographics of the company's existing customers and the general population of Germany. By the end of this part, you should be able to describe parts of the general population that are more likely to be part of the mail-order company's main customer base, and which parts of the general population are less so.</p>
+<h2 id="Part-1:-Customer-Segmentation-Report">Part 1: Customer Segmentation Report<a class="anchor-link" href="#Part-1:-Customer-Segmentation-Report">&#182;</a></h2><p>Here I have used unsupervised learning techniques (PCA) to describe the relationship between the demographics of the company's existing customers and the general population of Germany. By the end of this part, I have described parts of the general population that are more likely to be part of the mail-order company's main customer base.</p>
 
 </div>
 </div>
@@ -16423,19 +16399,6 @@ Name: diff, dtype: float64</pre>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
     </div>
   </div>
